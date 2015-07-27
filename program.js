@@ -4,17 +4,35 @@ var http     = require('http');
 var net      = require('net');
 
 
-// Challenge 11
+// Challenge 12
 var
+  map = require('through2-map'),
   port = Number(process.argv[2]),
-  filePath = path.resolve(process.argv[3])
   server = http.createServer(function (req, res) {
-    file = fs.createReadStream(filePath);
-    res.writeHead(200, { 'content-type': 'text/plain' });
-    file.pipe(res);
+    if (req.method != 'POST') {
+      return res.end('send me a POST plz\n')
+    } else {
+      res.writeHead(200, { 'content-type': 'text/plain' });
+      req.pipe(map(function (chunk) {
+        return chunk.toString().toUpperCase();
+      })).pipe(res);
+    }
   });
 
 server.listen(port);
+
+
+// Challenge 11
+// var
+//   port = Number(process.argv[2]),
+//   filePath = path.resolve(process.argv[3])
+//   server = http.createServer(function (req, res) {
+//     file = fs.createReadStream(filePath);
+//     res.writeHead(200, { 'content-type': 'text/plain' });
+//     file.pipe(res);
+//   });
+//
+// server.listen(port);
 
 // Challenge 10
 // var
