@@ -1,22 +1,37 @@
 var fs   = require('fs');
 var path = require('path');
+var findByExtension = require('./findbyextension')
 
-// Challenge 4
+// Challenge 5
 var directory = path.resolve(process.argv[2])
 var extension = process.argv[3]
 
-fs.readdir(directory, function readFileNames(err, list) {
+findByExtension(directory, extension, function (err, files) {
   if (err) {
-    console.error(err)
+    return console.error(err);
   } else {
-    list.forEach(function (file) {
-      ext = path.extname(file).split('.')[1];
-      if (ext === extension) {
-        console.log(file);
-      }
+    files.forEach(function (file) {
+      console.log(file);
     });
   }
 });
+
+// Challenge 4
+// var directory = path.resolve(process.argv[2])
+// var extension = process.argv[3]
+//
+// fs.readdir(directory, function readFileNames(err, list) {
+//   if (err) {
+//     console.error(err)
+//   } else {
+//     list.forEach(function (file) {
+//       ext = path.extname(file).split('.')[1];
+//       if (ext === extension) {
+//         console.log(file);
+//       }
+//     });
+//   }
+// });
 
 // Challenge 3
 // file = fs.readFile(process.argv[2], 'utf8', function readArgvFile(err, data) {
