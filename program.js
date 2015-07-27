@@ -1,20 +1,32 @@
 var fs   = require('fs');
 var path = require('path');
-var findByExtension = require('./findbyextension')
+var http = require('http');
+
+// Challenge 6
+var url = process.argv[2];
+http.get(url, function (response) {
+  response.setEncoding('utf8');
+  response.on('data', function (data) {
+    console.log(data);
+  })
+}).on('error', function (err) {
+  console.log("Got error: " + err.message);
+})
 
 // Challenge 5
-var directory = path.resolve(process.argv[2])
-var extension = process.argv[3]
-
-findByExtension(directory, extension, function (err, files) {
-  if (err) {
-    return console.error(err);
-  } else {
-    files.forEach(function (file) {
-      console.log(file);
-    });
-  }
-});
+// var findByExtension = require('./findbyextension');
+// var directory = path.resolve(process.argv[2])
+// var extension = process.argv[3]
+//
+// findByExtension(directory, extension, function (err, files) {
+//   if (err) {
+//     return console.error(err);
+//   } else {
+//     files.forEach(function (file) {
+//       console.log(file);
+//     });
+//   }
+// });
 
 // Challenge 4
 // var directory = path.resolve(process.argv[2])
