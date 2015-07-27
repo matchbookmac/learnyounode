@@ -1,41 +1,57 @@
-var fs   = require('fs');
-var path = require('path');
-var http = require('http');
+var fs       = require('fs');
+var path     = require('path');
+var http     = require('http');
+var net      = require('net');
+
+
+// Challenge 10
+
+var
+  strftime = require('strftime'),
+  port = process.argv[2],
+  now = function () {
+    return strftime('%F %H:%M', new Date()) + '\n'
+  },
+  server = net.createServer(function (socket) {
+    socket.end(now());
+  });
+
+server.listen(port)
 
 // Challenge 9
-var
-  urls = process.argv.slice(2),
-  count = 0,
-  responses = []
-
-function printResults () {
-  if (count === urls.length) {
-    return console.log(responses.join('\n'));
-  }
-}
-
-function httpGet (index) {
-  http.get(urls[index], function (response) {
-    response.setEncoding('utf8');
-
-    response.on('data', function (data) {
-      responses[index] += data;
-    });
-
-    response.on('end', function () {
-      count++
-      printResults();
-    });
-
-  }).on('error', function (err) {
-    return console.error("Got error: " + err.message);
-  });
-}
-
-for (var i = 0; i < urls.length; i++) {
-  responses[i] = '';
-  httpGet(i);
-}
+// var
+//   urls = process.argv.slice(2),
+//   count = 0,
+//   responses = []
+//
+// function printResults () {
+//   if (count === urls.length) {
+//     return console.log(responses.join('\n'));
+//   }
+// }
+//
+// function httpGet (index) {
+//   http.get(urls[index], function (response) {
+//     response.setEncoding('utf8');
+//
+//     response.on('data', function (data) {
+//       responses[index] += data;
+//     });
+//
+//     response.on('end', function () {
+//       count++
+//       printResults();
+//     });
+//
+//   }).on('error', function (err) {
+//     return console.error("Got error: " + err.message);
+//   });
+// }
+//
+// for (var i = 0; i < urls.length; i++) {
+//   responses[i] = '';
+//   httpGet(i);
+// }
 
 // Challenge 7
 // var bl   = require('bl');

@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/matchbookmac/learnyounode",
   "dependencies": {
-    "bl": "^1.0.0"
+    "bl": "^1.0.0",
+    "strftime": "^0.9.2"
   }
 }
