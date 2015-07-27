@@ -2,25 +2,57 @@ var fs       = require('fs');
 var path     = require('path');
 var http     = require('http');
 var net      = require('net');
+var url      = require('url');
 
-
-// Challenge 12
+// Challenge 13
 var
-  map = require('through2-map'),
+  strftime = require('strftime'),
   port = Number(process.argv[2]),
   server = http.createServer(function (req, res) {
-    if (req.method != 'POST') {
-      return res.end('send me a POST plz\n')
+    if (req.method != 'GET') {
+      return res.end('send me a GET plz\n')
     } else {
-      res.writeHead(200, { 'content-type': 'text/plain' });
-      req.pipe(map(function (chunk) {
-        return chunk.toString().toUpperCase();
-      })).pipe(res);
+      res.writeHead(200, { 'content-type': 'application/json' });
+
+      route = url.parse(req.url, true)
+      date  = new Date(route.query.iso)
+
+      if (route.pathname === '/api/parsetime') {
+        res.pipe(JSON.stringify({
+          "hour": strftime('%H', date)
+          "minute": strftime('%M', date)
+          "second": strftime('%S', date)
+        }));
+      } else (route.pathname == '/api/unixtime') {
+        res.pipe(JSON.stringify({
+          "unixtime": strftime('%H', date)
+        }));
+      }
+
+      // req.pipe(map(function (chunk) {
+      //   return chunk.toString().toUpperCase();
+      // })).pipe(res);
     }
   });
 
 server.listen(port);
 
+// Challenge 12
+// var
+//   map = require('through2-map'),
+//   port = Number(process.argv[2]),
+//   server = http.createServer(function (req, res) {
+//     if (req.method != 'POST') {
+//       return res.end('send me a POST plz\n')
+//     } else {
+//       res.writeHead(200, { 'content-type': 'text/plain' });
+//       req.pipe(map(function (chunk) {
+//         return chunk.toString().toUpperCase();
+//       })).pipe(res);
+//     }
+//   });
+//
+// server.listen(port);
 
 // Challenge 11
 // var
