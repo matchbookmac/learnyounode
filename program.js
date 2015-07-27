@@ -4,19 +4,30 @@ var http     = require('http');
 var net      = require('net');
 
 
-// Challenge 10
-
+// Challenge 11
 var
-  strftime = require('strftime'),
-  port = process.argv[2],
-  now = function () {
-    return strftime('%F %H:%M', new Date()) + '\n'
-  },
-  server = net.createServer(function (socket) {
-    socket.end(now());
+  port = Number(process.argv[2]),
+  filePath = path.resolve(process.argv[3])
+  server = http.createServer(function (req, res) {
+    file = fs.createReadStream(filePath);
+    res.writeHead(200, { 'content-type': 'text/plain' });
+    file.pipe(res);
   });
 
-server.listen(port)
+server.listen(port);
+
+// Challenge 10
+// var
+//   strftime = require('strftime'),
+//   port = process.argv[2],
+//   now = function () {
+//     return strftime('%F %H:%M', new Date()) + '\n'
+//   },
+//   server = net.createServer(function (socket) {
+//     socket.end(now());
+//   });
+//
+// server.listen(port);
 
 // Challenge 9
 // var
