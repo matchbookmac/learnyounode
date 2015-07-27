@@ -1,15 +1,32 @@
-var fs = require('fs');
+var fs   = require('fs');
+var path = require('path');
 
+// Challenge 4
+var directory = path.resolve(process.argv[2])
+var extension = process.argv[3]
 
-// Challenge 3
-file = fs.readFile(process.argv[2], 'utf8', function readArgvFile(err, data) {
+fs.readdir(directory, function readFileNames(err, list) {
   if (err) {
     console.error(err)
   } else {
-    splitFile = data.split('\n');
-    console.log(splitFile.length - 1);
+    list.forEach(function (file) {
+      ext = path.extname(file).split('.')[1];
+      if (ext === extension) {
+        console.log(file);
+      }
+    });
   }
 });
+
+// Challenge 3
+// file = fs.readFile(process.argv[2], 'utf8', function readArgvFile(err, data) {
+//   if (err) {
+//     console.error(err)
+//   } else {
+//     splitFile = data.split('\n');
+//     console.log(splitFile.length - 1);
+//   }
+// });
 
 // Challenge 2
 // file = fs.readFileSync(process.argv[2]).toString();
