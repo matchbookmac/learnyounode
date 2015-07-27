@@ -1,17 +1,31 @@
 var fs   = require('fs');
 var path = require('path');
 var http = require('http');
-
-// Challenge 6
+var bl   = require('bl');
+// Challenge 7
 var url = process.argv[2];
 http.get(url, function (response) {
-  response.setEncoding('utf8');
-  response.on('data', function (data) {
-    console.log(data);
-  })
-}).on('error', function (err) {
-  console.log("Got error: " + err.message);
-})
+  response.pipe(bl(function (err, data) {
+    if (err) {
+      return console.error("Got error: " + err.message);
+    } else {
+      data = data.toString();
+      console.log(data.length);
+      console.log(data);
+    }
+  }));
+});
+
+// Challenge 6
+// var url = process.argv[2];
+// http.get(url, function (response) {
+//   response.setEncoding('utf8');
+//   response.on('data', function (data) {
+//     console.log(data);
+//   })
+// }).on('error', function (err) {
+//   console.log("Got error: " + err.message);
+// })
 
 // Challenge 5
 // var findByExtension = require('./findbyextension');

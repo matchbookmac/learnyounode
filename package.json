@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/matchbookmac/learnyounode/issues"
   },
-  "homepage": "https://github.com/matchbookmac/learnyounode"
+  "homepage": "https://github.com/matchbookmac/learnyounode",
+  "dependencies": {
+    "bl": "^1.0.0"
+  }
 }
