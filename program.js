@@ -3,24 +3,39 @@ var path = require('path');
 var http = require('http');
 
 // Challenge 9
-var url = process.argv[2];
-http.get(url, function (response) {
-  response.setEncoding('utf8');
-  body = [];
+var
+  urls = process.argv.slice(2),
+  count = 0,
+  responses = []
 
-  response.on('data', function (data) {
-    body.push(data);
+function printResults () {
+  if (count === urls.length) {
+    return console.log(responses.join('\n'));
+  }
+}
+
+function httpGet (index) {
+  http.get(urls[index], function (response) {
+    response.setEncoding('utf8');
+
+    response.on('data', function (data) {
+      responses[index] += data;
+    });
+
+    response.on('end', function () {
+      count++
+      printResults();
+    });
+
+  }).on('error', function (err) {
+    return console.error("Got error: " + err.message);
   });
+}
 
-  response.on('end', function () {
-    console.log(body.join('').length);
-    console.log(body.join(''));
-  });
-
-}).on('error', function (err) {
-  return console.error("Got error: " + err.message);
-})
-
+for (var i = 0; i < urls.length; i++) {
+  responses[i] = '';
+  httpGet(i);
+}
 
 // Challenge 7
 // var bl   = require('bl');
@@ -36,6 +51,25 @@ http.get(url, function (response) {
 //     }
 //   }));
 // });
+
+// Challenge 7 without library
+// var url = process.argv[2];
+// http.get(url, function (response) {
+//   response.setEncoding('utf8');
+//   body = [];
+//
+//   response.on('data', function (data) {
+//     body.push(data);
+//   });
+//
+//   response.on('end', function () {
+//     console.log(body.join('').length);
+//     console.log(body.join(''));
+//   });
+//
+// }).on('error', function (err) {
+//   return console.error("Got error: " + err.message);
+// })
 
 // Challenge 6
 // var url = process.argv[2];
