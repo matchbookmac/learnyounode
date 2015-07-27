@@ -1,20 +1,41 @@
 var fs   = require('fs');
 var path = require('path');
 var http = require('http');
-var bl   = require('bl');
-// Challenge 7
+
+// Challenge 9
 var url = process.argv[2];
 http.get(url, function (response) {
-  response.pipe(bl(function (err, data) {
-    if (err) {
-      return console.error("Got error: " + err.message);
-    } else {
-      data = data.toString();
-      console.log(data.length);
-      console.log(data);
-    }
-  }));
-});
+  response.setEncoding('utf8');
+  body = [];
+
+  response.on('data', function (data) {
+    body.push(data);
+  });
+
+  response.on('end', function () {
+    console.log(body.join('').length);
+    console.log(body.join(''));
+  });
+
+}).on('error', function (err) {
+  return console.error("Got error: " + err.message);
+})
+
+
+// Challenge 7
+// var bl   = require('bl');
+// var url = process.argv[2];
+// http.get(url, function (response) {
+//   response.pipe(bl(function (err, data) {
+//     if (err) {
+//       return console.error("Got error: " + err.message);
+//     } else {
+//       data = data.toString();
+//       console.log(data.length);
+//       console.log(data);
+//     }
+//   }));
+// });
 
 // Challenge 6
 // var url = process.argv[2];
