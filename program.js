@@ -8,30 +8,39 @@ var url      = require('url');
 var
   strftime = require('strftime'),
   port = Number(process.argv[2]),
+  parsetime = function (time) {
+    return {
+      hour: Number(strftime('%H', date)),
+      minute: Number(strftime('%-M', date)),
+      second: Number(strftime('%-S', date)),
+    }
+  },
+  unixtime = function (time) {
+    return {
+      unixtime: date.getTime()
+    }
+  },
   server = http.createServer(function (req, res) {
     if (req.method != 'GET') {
       return res.end('send me a GET plz\n')
     } else {
-      res.writeHead(200, { 'content-type': 'application/json' });
-
       route = url.parse(req.url, true)
       date  = new Date(route.query.iso)
+      var result;
 
       if (route.pathname === '/api/parsetime') {
-        res.pipe(JSON.stringify({
-          "hour": strftime('%H', date)
-          "minute": strftime('%M', date)
-          "second": strftime('%S', date)
-        }));
-      } else (route.pathname == '/api/unixtime') {
-        res.pipe(JSON.stringify({
-          "unixtime": strftime('%H', date)
-        }));
+        result = parsetime(date)
+      } else if (route.pathname == '/api/unixtime') {
+        result = unixtime(date)
       }
 
-      // req.pipe(map(function (chunk) {
-      //   return chunk.toString().toUpperCase();
-      // })).pipe(res);
+      if (result) {
+        res.writeHead(200, { 'content-type': 'application/json' });
+        res.end(JSON.stringify(result))
+      } else {
+        res.writeHead(404)
+        res.end
+      }
     }
   });
 
